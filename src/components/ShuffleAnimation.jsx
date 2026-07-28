@@ -4,7 +4,7 @@ import { soundManager } from '../utils/audio';
 
 export default function ShuffleAnimation({ candidates, onComplete }) {
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [statusText, setStatusText] = useState('Mengacak takdir cinta...');
+  const [statusText, setStatusText] = useState('Mengacak takdir cinta & zodiak...');
   const [isFinalizing, setIsFinalizing] = useState(false);
 
   useEffect(() => {
@@ -14,7 +14,7 @@ export default function ShuffleAnimation({ candidates, onComplete }) {
 
     let speed = 80;
     let step = 0;
-    const maxSteps = 28; // total reel cycles before stopping
+    const maxSteps = 28;
 
     const interval = setInterval(() => {
       step++;
@@ -24,8 +24,8 @@ export default function ShuffleAnimation({ candidates, onComplete }) {
       // Play tick sound with rising pitch
       soundManager.playTick(450 + (step * 15));
 
-      if (step >= maxSteps - 6) {
-        setStatusText('Menyelaraskan energi frekuensi cinta...');
+      if (step >= maxSteps - 7) {
+        setStatusText('Menyelaraskan frekuensi energi cinta...');
       }
 
       if (step >= maxSteps) {
@@ -35,7 +35,7 @@ export default function ShuffleAnimation({ candidates, onComplete }) {
         setIsFinalizing(true);
         setStatusText('Tercapai! Takdir Cinta Terkuak! ✨');
 
-        // Play victory sound & transition after 800ms
+        // Play victory sound & transition
         setTimeout(() => {
           soundManager.playVictory();
           onComplete(chosenWinner);
@@ -47,37 +47,38 @@ export default function ShuffleAnimation({ candidates, onComplete }) {
   }, [candidates, onComplete]);
 
   return (
-    <div className="glass-card text-center py-10">
+    <div className="glass-card text-center py-10 animate-fadeIn">
       <div className="flex justify-center mb-4">
-        <Dices size={48} className="text-pink-400 animate-spin" />
+        <Dices size={52} className="text-pink-400 animate-spin" />
       </div>
 
-      <h2 className="text-xl font-bold text-pink-300 mb-2 flex items-center justify-center gap-2">
+      <h2 className="text-xl font-extrabold text-pink-300 mb-1 flex items-center justify-center gap-2">
         <Sparkles size={20} className="text-amber-300 animate-pulse" />
         MENGACAK NAMA JODOH
         <Sparkles size={20} className="text-amber-300 animate-pulse" />
       </h2>
 
-      <p className="text-sm text-purple-200/70 mb-6">{statusText}</p>
+      <p className="text-sm text-purple-200/80 mb-6">{statusText}</p>
 
       {/* Gacha Reel Slot Box */}
       <div className={`gacha-box transition-all duration-300 ${isFinalizing ? 'scale-105 border-yellow-400 shadow-[0_0_35px_rgba(255,215,0,0.8)]' : ''}`}>
         <div className="gacha-reel flex items-center justify-center gap-3">
-          <Heart size={28} className="fill-pink-500 text-pink-500 animate-pulse" />
-          <span className="tracking-wide">
+          <Heart size={28} className="fill-pink-500 text-pink-500 animate-pulse shrink-0" />
+          <span className="tracking-wide text-2xl font-black text-amber-300">
             {candidates[currentIndex]}
           </span>
-          <Heart size={28} className="fill-pink-500 text-pink-500 animate-pulse" />
+          <Heart size={28} className="fill-pink-500 text-pink-500 animate-pulse shrink-0" />
         </div>
       </div>
 
-      <div className="flex justify-center gap-2 mt-4">
+      {/* Candidate Pills */}
+      <div className="flex justify-center flex-wrap gap-2 mt-5">
         {candidates.map((cand, idx) => (
           <span
             key={idx}
-            className={`px-3 py-1 text-xs rounded-full border transition-all ${
+            className={`px-3.5 py-1.5 text-xs rounded-full border transition-all ${
               idx === currentIndex
-                ? 'bg-pink-500/30 border-pink-400 text-white font-bold scale-110'
+                ? 'bg-pink-500/30 border-pink-400 text-white font-bold scale-110 shadow-lg'
                 : 'bg-white/5 border-white/10 text-white/40'
             }`}
           >
