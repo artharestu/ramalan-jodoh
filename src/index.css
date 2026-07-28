@@ -1,0 +1,383 @@
+@import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Outfit:wght@400;600;700;800&display=swap');
+
+:root {
+  --bg-dark: #0f0a1c;
+  --card-bg: rgba(26, 18, 48, 0.75);
+  --glass-border: rgba(255, 105, 180, 0.25);
+  --primary-pink: #ff2a70;
+  --primary-purple: #9d4edf;
+  --neon-glow-pink: 0 0 25px rgba(255, 42, 112, 0.6);
+  --neon-glow-purple: 0 0 25px rgba(157, 78, 223, 0.6);
+  --accent-gold: #ffd700;
+  --text-light: #ffffff;
+  --text-muted: #b3a6d3;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: 'Fredoka', 'Outfit', sans-serif;
+  user-select: none;
+}
+
+body {
+  background: radial-gradient(circle at 50% 20%, #29154a 0%, #0d0618 80%);
+  color: var(--text-light);
+  min-height: 100vh;
+  overflow-x: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+
+/* Dynamic background glowing stars & hearts */
+body::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-image: 
+    radial-gradient(2px 2px at 20px 30px, #fff, rgba(0,0,0,0)),
+    radial-gradient(2px 2px at 40px 70px, #ff69b4, rgba(0,0,0,0)),
+    radial-gradient(3px 3px at 80px 120px, #ffd700, rgba(0,0,0,0)),
+    radial-gradient(2px 2px at 150px 200px, #fff, rgba(0,0,0,0));
+  background-repeat: repeat;
+  background-size: 300px 300px;
+  opacity: 0.4;
+  pointer-events: none;
+  z-index: 0;
+  animation: bgStarsMove 30s linear infinite;
+}
+
+@keyframes bgStarsMove {
+  0% { background-position: 0 0; }
+  100% { background-position: 300px 600px; }
+}
+
+.app-container {
+  width: 100%;
+  max-width: 520px;
+  min-height: 90vh;
+  margin: 20px auto;
+  padding: 24px 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  z-index: 1;
+}
+
+/* Glassmorphism Card Wrapper */
+.glass-card {
+  background: var(--card-bg);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--glass-border);
+  border-radius: 24px;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.5), inset 0 1px 1px rgba(255, 255, 255, 0.2);
+  width: 100%;
+  padding: 28px 24px;
+  position: relative;
+  overflow: hidden;
+}
+
+.glass-card::after {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle at 50% 0%, rgba(255, 42, 112, 0.15), transparent 70%);
+  pointer-events: none;
+}
+
+/* Glow Titles */
+.title-glow {
+  font-size: clamp(1.35rem, 5.5vw, 1.75rem);
+  font-weight: 700;
+  text-align: center;
+  background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 99%, #feada6 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: 0 0 20px rgba(255, 42, 112, 0.5);
+  letter-spacing: 0.5px;
+  line-height: 1.25;
+}
+
+.subtitle-glow {
+  font-size: 0.95rem;
+  color: var(--text-muted);
+  text-align: center;
+  margin-top: 6px;
+  margin-bottom: 24px;
+}
+
+/* Neon Inputs */
+.input-group {
+  margin-bottom: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  position: relative;
+}
+
+.input-label {
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: #e2d9f3;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.input-label svg {
+  color: var(--primary-pink);
+}
+
+.neon-input {
+  width: 100%;
+  padding: 14px 16px;
+  background: rgba(15, 10, 28, 0.7);
+  border: 1.5px solid rgba(255, 105, 180, 0.3);
+  border-radius: 14px;
+  color: #ffffff;
+  font-size: 1rem;
+  outline: none;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.4);
+}
+
+.neon-input::placeholder {
+  color: rgba(255, 255, 255, 0.35);
+}
+
+.neon-input:focus {
+  border-color: var(--primary-pink);
+  box-shadow: 0 0 15px rgba(255, 42, 112, 0.4), inset 0 2px 4px rgba(0, 0, 0, 0.4);
+  background: rgba(20, 13, 38, 0.85);
+}
+
+.neon-input.error-shake {
+  border-color: #ff4d4d;
+  box-shadow: 0 0 15px rgba(255, 77, 77, 0.6);
+  animation: shake 0.4s ease-in-out;
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-6px); }
+  75% { transform: translateX(6px); }
+}
+
+/* Neon Game Button */
+.btn-game {
+  width: 100%;
+  padding: 16px 24px;
+  margin-top: 10px;
+  border: none;
+  border-radius: 18px;
+  background: linear-gradient(135deg, var(--primary-pink) 0%, var(--primary-purple) 100%);
+  color: #ffffff;
+  font-size: 1.15rem;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: var(--neon-glow-pink);
+  transition: all 0.25s ease;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-game::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(
+    45deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.25) 50%,
+    transparent 100%
+  );
+  transform: rotate(30deg);
+  transition: transform 0.6s ease;
+}
+
+.btn-game:hover {
+  transform: translateY(-2px) scale(1.01);
+  box-shadow: 0 0 30px rgba(255, 42, 112, 0.8);
+}
+
+.btn-game:hover::before {
+  transform: rotate(30deg) translate(100%, 100%);
+}
+
+.btn-game:active {
+  transform: translateY(1px) scale(0.99);
+}
+
+/* Secondary Button */
+.btn-secondary {
+  width: 100%;
+  padding: 14px 20px;
+  border: 1.5px solid rgba(255, 255, 255, 0.2);
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.08);
+  color: #ffffff;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+}
+
+.btn-secondary:hover {
+  background: rgba(255, 255, 255, 0.18);
+  border-color: rgba(255, 255, 255, 0.4);
+}
+
+/* Gacha Reel Slot Animation */
+.gacha-box {
+  background: rgba(10, 6, 20, 0.85);
+  border: 2px solid var(--primary-pink);
+  box-shadow: var(--neon-glow-pink);
+  border-radius: 20px;
+  padding: 32px 20px;
+  text-align: center;
+  margin: 20px 0;
+  position: relative;
+}
+
+.gacha-reel {
+  font-size: 1.8rem;
+  font-weight: 800;
+  color: #ffe600;
+  text-shadow: 0 0 15px rgba(255, 230, 0, 0.8);
+  min-height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Result Match Card */
+.result-header {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.result-badge {
+  display: inline-block;
+  background: linear-gradient(135deg, #ffd700, #ff8c00);
+  color: #1a0a2a;
+  padding: 6px 16px;
+  border-radius: 20px;
+  font-weight: 800;
+  font-size: 0.95rem;
+  margin-bottom: 12px;
+  box-shadow: 0 4px 15px rgba(255, 215, 0, 0.4);
+}
+
+.couple-names {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  font-size: 1.4rem;
+  font-weight: 700;
+  margin: 16px 0;
+  color: #ffffff;
+}
+
+.heart-pulse {
+  color: var(--primary-pink);
+  animation: pulseHeart 1s infinite alternate;
+}
+
+@keyframes pulseHeart {
+  0% { transform: scale(1); }
+  100% { transform: scale(1.3); filter: drop-shadow(0 0 10px var(--primary-pink)); }
+}
+
+/* Percentage Ring */
+.percentage-circle {
+  width: 130px;
+  height: 130px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255,42,112,0.2) 0%, transparent 70%);
+  border: 4px solid var(--primary-pink);
+  box-shadow: var(--neon-glow-pink);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin: 0 auto 20px auto;
+}
+
+.percentage-num {
+  font-size: 2.5rem;
+  font-weight: 800;
+  color: #ffffff;
+  line-height: 1;
+}
+
+.percentage-label {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+/* Stat Bar */
+.stat-item {
+  margin-bottom: 12px;
+}
+
+.stat-header {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  margin-bottom: 4px;
+}
+
+.stat-bar-bg {
+  width: 100%;
+  height: 8px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.stat-bar-fill {
+  height: 100%;
+  border-radius: 10px;
+  background: linear-gradient(90deg, var(--primary-pink), var(--primary-purple));
+  transition: width 1s ease-out;
+}
+
+/* Fortune Box */
+.fortune-box {
+  background: rgba(255, 255, 255, 0.05);
+  border-left: 4px solid var(--accent-gold);
+  padding: 14px 16px;
+  border-radius: 8px 14px 14px 8px;
+  margin: 20px 0;
+  font-size: 0.92rem;
+  line-height: 1.5;
+  color: #f0e6ff;
+  font-style: italic;
+}
