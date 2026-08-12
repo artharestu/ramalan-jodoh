@@ -1,17 +1,29 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Header from './components/Header';
 import InputForm from './components/InputForm';
 import ShuffleAnimation from './components/ShuffleAnimation';
 import ResultModal from './components/ResultModal';
 import SoundToggle from './components/SoundToggle';
+import AdminDashboard from './components/AdminDashboard';
+
+function getPage() {
+  return window.location.hash === '#/admin' ? 'admin' : 'home';
+}
 
 export default function App() {
+  const [currentPage, setCurrentPage] = useState(getPage);
   const [step, setStep] = useState('FORM'); // 'FORM' | 'SHUFFLE' | 'RESULT'
   const [userData, setUserData] = useState({
     userName: '',
     candidates: []
   });
   const [selectedCandidate, setSelectedCandidate] = useState('');
+
+  useEffect(() => {
+    const onHashChange = () => setCurrentPage(getPage());
+    window.addEventListener('hashchange', onHashChange);
+    return () => window.removeEventListener('hashchange', onHashChange);
+  }, []);
 
   const handleFormSubmit = ({ userName, candidates }) => {
     setUserData({ userName, candidates });
@@ -28,6 +40,12 @@ export default function App() {
     setSelectedCandidate('');
   };
 
+  // Admin page
+  if (currentPage === 'admin') {
+    return <AdminDashboard />;
+  }
+
+  // Main app
   return (
     <main className="app-container">
       <Header />
@@ -60,4 +78,3 @@ export default function App() {
     </main>
   );
 }
-
