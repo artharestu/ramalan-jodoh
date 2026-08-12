@@ -140,7 +140,7 @@ export default function ResultModal({ userName, selectedCandidate, onReset }) {
 
         <button onClick={handleReplay} className="btn-game">
           <RefreshCw size={18} />
-          Ramal Lagi / Coba Nama Lain
+          Ramal Lagi
         </button>
       </div>
     </div>

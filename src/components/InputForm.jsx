@@ -64,7 +64,8 @@ export default function InputForm({ onSubmit }) {
       <div className="input-group">
         <label className="input-label" htmlFor="userName">
           <User size={18} />
-          Nama Kamu <span className="text-pink-400">*</span>
+          Nama Kamu
+          <span className="input-label-required">*</span>
         </label>
         <input
           id="userName"
@@ -78,25 +79,26 @@ export default function InputForm({ onSubmit }) {
         />
       </div>
 
-      <div className="mt-6 mb-8 border-t border-pink-500/20 relative flex justify-center items-center">
-        <span className="bg-[#150d2a] px-3 text-xs text-pink-300 font-semibold tracking-wider flex items-center gap-2">
-          <Heart size={12} className="fill-pink-500 text-pink-500" />
+      <div style={{ marginTop: '24px', marginBottom: '20px', borderTop: '1px solid rgba(236, 72, 153, 0.2)', position: 'relative', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+        <span style={{ background: '#150d2a', padding: '0 12px', fontSize: '0.75rem', color: '#f9a8d4', fontWeight: 600, letterSpacing: '0.05em', display: 'flex', alignItems: 'center', gap: '8px' }}>
+          <Heart size={12} style={{ fill: '#ec4899', color: '#ec4899' }} />
           &nbsp;NAMA 3 ORANG YANG DISUKAI&nbsp;
-          <Heart size={12} className="fill-pink-500 text-pink-500" />
+          <Heart size={12} style={{ fill: '#ec4899', color: '#ec4899' }} />
         </span>
       </div>
 
       {/* Input Candidate 1 */}
       <div className="input-group">
         <label className="input-label" htmlFor="candidate1">
-          <Heart size={16} className="text-pink-400" />
-          Orang Yang Kamu Suka #1 <span className="text-pink-400">*</span>
+          <span className="input-label-number">1</span>
+          Nama Gebetan Pertama
+          <span className="input-label-required">*</span>
         </label>
         <input
           id="candidate1"
           name="candidate1"
           type="text"
-          placeholder="Nama orang yang kamu sukai #1..."
+          placeholder="Ketik nama orang pertama..."
           value={formData.candidate1}
           onChange={handleChange}
           className={`neon-input ${errors.candidate1 ? 'error-shake' : ''}`}
@@ -107,14 +109,15 @@ export default function InputForm({ onSubmit }) {
       {/* Input Candidate 2 */}
       <div className="input-group">
         <label className="input-label" htmlFor="candidate2">
-          <Heart size={16} className="text-pink-400" />
-          Orang Yang Kamu Suka #2 <span className="text-pink-400">*</span>
+          <span className="input-label-number">2</span>
+          Nama Gebetan Kedua
+          <span className="input-label-required">*</span>
         </label>
         <input
           id="candidate2"
           name="candidate2"
           type="text"
-          placeholder="Nama orang yang kamu sukai #2..."
+          placeholder="Ketik nama orang kedua..."
           value={formData.candidate2}
           onChange={handleChange}
           className={`neon-input ${errors.candidate2 ? 'error-shake' : ''}`}
@@ -125,14 +128,15 @@ export default function InputForm({ onSubmit }) {
       {/* Input Candidate 3 */}
       <div className="input-group">
         <label className="input-label" htmlFor="candidate3">
-          <Heart size={16} className="text-pink-400" />
-          Orang Yang Kamu Suka #3 <span className="text-pink-400">*</span>
+          <span className="input-label-number">3</span>
+          Nama Gebetan Ketiga
+          <span className="input-label-required">*</span>
         </label>
         <input
           id="candidate3"
           name="candidate3"
           type="text"
-          placeholder="Nama orang yang kamu sukai #3..."
+          placeholder="Ketik nama orang ketiga..."
           value={formData.candidate3}
           onChange={handleChange}
           className={`neon-input ${errors.candidate3 ? 'error-shake' : ''}`}
@@ -142,7 +146,7 @@ export default function InputForm({ onSubmit }) {
 
       {/* Error Notification */}
       {errorMessage && (
-        <div className="flex items-center gap-2 text-red-400 bg-red-500/10 border border-red-500/30 p-3 rounded-xl text-sm font-semibold mb-4 animate-bounce">
+        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: '#f87171', background: 'rgba(239, 68, 68, 0.1)', border: '1px solid rgba(239, 68, 68, 0.3)', padding: '12px', borderRadius: '12px', fontSize: '0.875rem', fontWeight: 600, marginBottom: '16px' }}>
           <AlertCircle size={18} />
           <span>{errorMessage}</span>
         </div>
@@ -151,7 +155,7 @@ export default function InputForm({ onSubmit }) {
       {/* Submit Button */}
       <button type="submit" className="btn-game">
         <Sparkles size={20} className="animate-spin" />
-        RAMAL JODOH SEKARANG!
+        RAMAL JODOH
         <Heart size={20} className="fill-white" />
       </button>
     </form>

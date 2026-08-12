@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Sparkles, Dices, Heart } from 'lucide-react';
+import { Dices, Heart } from 'lucide-react';
 import { soundManager } from '../utils/audio';
 
 export default function ShuffleAnimation({ candidates, onComplete }) {
@@ -52,10 +52,8 @@ export default function ShuffleAnimation({ candidates, onComplete }) {
         <Dices size={48} className="text-pink-400 animate-spin" />
       </div>
 
-      <h2 className="text-xl font-bold text-pink-300 mb-2 flex items-center justify-center gap-2">
-        <Sparkles size={20} className="text-amber-300 animate-pulse" />
+      <h2 className="text-xl font-bold text-pink-300 mb-2 text-center">
         MENGACAK NAMA JODOH
-        <Sparkles size={20} className="text-amber-300 animate-pulse" />
       </h2>
 
       <p className="text-sm text-purple-200/70 mb-6">{statusText}</p>

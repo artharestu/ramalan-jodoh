@@ -3,6 +3,7 @@ import Header from './components/Header';
 import InputForm from './components/InputForm';
 import ShuffleAnimation from './components/ShuffleAnimation';
 import ResultModal from './components/ResultModal';
+import SoundToggle from './components/SoundToggle';
 
 export default function App() {
   const [step, setStep] = useState('FORM'); // 'FORM' | 'SHUFFLE' | 'RESULT'
@@ -50,9 +51,12 @@ export default function App() {
         />
       )}
 
-      <footer className="mt-8 text-center text-xs text-purple-300/40">
-        Game Ramalan Jodoh Interaktif © {new Date().getFullYear()} — Made with ❤️ & React
+      <SoundToggle />
+
+      <footer className="mt-8 text-center text-xs text-purple-300/40" style={{ marginTop: '32px', textAlign: 'center', fontSize: '0.75rem', color: 'rgba(216, 180, 254, 0.4)' }}>
+        Game Ramalan Jodoh Interaktif © {new Date().getFullYear()} — by Aresa Studio ❤️
       </footer>
     </main>
   );
 }
+
