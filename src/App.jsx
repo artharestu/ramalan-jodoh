@@ -46,6 +46,7 @@ export default function App() {
       {step === 'RESULT' && (
         <ResultModal
           userName={userData.userName}
+          candidates={userData.candidates}
           selectedCandidate={selectedCandidate}
           onReset={handleReset}
         />

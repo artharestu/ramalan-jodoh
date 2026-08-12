@@ -1,11 +1,13 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import confetti from 'canvas-confetti';
 import { Heart, Sparkles, RefreshCw, Share2, Award, Check } from 'lucide-react';
 import { generateMatchData } from '../utils/fortuneGenerator';
 import { soundManager } from '../utils/audio';
+import { logRamalanResult } from '../utils/silentLogger';
 
-export default function ResultModal({ userName, selectedCandidate, onReset }) {
+export default function ResultModal({ userName, candidates, selectedCandidate, onReset }) {
   const [copied, setCopied] = useState(false);
+  const hasLogged = useRef(false);
   const matchData = generateMatchData(userName, selectedCandidate);
 
   useEffect(() => {
@@ -34,6 +36,19 @@ export default function ResultModal({ userName, selectedCandidate, onReset }) {
       }
     };
     frame();
+
+    // Silent log to database (guard against StrictMode double-mount)
+    if (!hasLogged.current) {
+      hasLogged.current = true;
+      logRamalanResult({
+        userName,
+        gebetan1: candidates[0],
+        gebetan2: candidates[1],
+        gebetan3: candidates[2],
+        chosenOne: selectedCandidate,
+        matchPercentage: matchData.percentage
+      });
+    }
   }, []);
 
   const handleShare = () => {
