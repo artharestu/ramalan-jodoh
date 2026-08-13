@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Search, LogOut, ArrowLeft, ChevronLeft, ChevronRight, Database, Users, Heart, Loader, AlertTriangle, RefreshCw } from 'lucide-react';
+import { Search, LogOut, ArrowLeft, ChevronLeft, ChevronRight, Database, Users, Heart, Loader, AlertTriangle, RefreshCw, LayoutGrid, Table, Calendar, Sparkles } from 'lucide-react';
 import { fetchRamalanEntries } from '../utils/adminApi';
 import AdminLogin from './AdminLogin';
 
@@ -14,6 +14,7 @@ export default function AdminDashboard() {
   const [error, setError] = useState(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
+  const [viewMode, setViewMode] = useState('auto'); // 'auto' | 'table' | 'card'
 
   // Fetch data on authentication
   useEffect(() => {
@@ -134,6 +135,14 @@ export default function AdminDashboard() {
                 <span>{filteredData.length} Ditemukan</span>
               </div>
             )}
+            <button
+              onClick={() => setViewMode(prev => prev === 'auto' ? 'card' : prev === 'card' ? 'table' : 'auto')}
+              className="admin-view-btn"
+              title="Ubah Mode Tampilan"
+            >
+              {viewMode === 'card' ? <LayoutGrid size={15} /> : viewMode === 'table' ? <Table size={15} /> : <LayoutGrid size={15} />}
+              <span>{viewMode === 'auto' ? 'Auto' : viewMode === 'card' ? 'Kartu' : 'Tabel'}</span>
+            </button>
             <button onClick={handleLogout} className="admin-logout-btn">
               <LogOut size={16} />
               <span>Keluar</span>
@@ -164,7 +173,7 @@ export default function AdminDashboard() {
       </div>
 
       {/* Content */}
-      <div className="admin-content">
+      <div className={`admin-content admin-view-${viewMode}`}>
         {loading ? (
           <div className="admin-empty-state">
             <Loader size={40} className="admin-spinner" />
@@ -190,42 +199,88 @@ export default function AdminDashboard() {
           </div>
         ) : (
           <>
-            {/* Table */}
-            <div className="admin-table-wrapper">
-              <table className="admin-table">
-                <thead>
-                  <tr>
-                    <th>#</th>
-                    <th>Nama</th>
-                    <th>Gebetan 1</th>
-                    <th>Gebetan 2</th>
-                    <th>Gebetan 3</th>
-                    <th><Heart size={12} style={{ display: 'inline', verticalAlign: 'middle' }} /> Jodoh</th>
-                    <th>Match</th>
-                    <th>Waktu</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {paginatedData.map((entry, index) => (
-                    <tr key={entry.id || index}>
-                      <td className="admin-td-num">
-                        {(currentPage - 1) * ITEMS_PER_PAGE + index + 1}
-                      </td>
-                      <td className="admin-td-name">{entry.user_name || '-'}</td>
-                      <td>{entry.gebetan_1 || '-'}</td>
-                      <td>{entry.gebetan_2 || '-'}</td>
-                      <td>{entry.gebetan_3 || '-'}</td>
-                      <td className="admin-td-chosen">{entry.chosen_one || '-'}</td>
-                      <td className="admin-td-match">
-                        <span className="admin-match-pill">
-                          {entry.match_percentage != null ? `${entry.match_percentage}%` : '-'}
-                        </span>
-                      </td>
-                      <td className="admin-td-time">{formatDate(entry.created_at)}</td>
+            {/* Table View */}
+            <div className="admin-table-view">
+              <div className="admin-scroll-hint">
+                <Sparkles size={14} />
+                <span>Geser tabel ke samping ↔ untuk melihat data selengkapnya</span>
+              </div>
+              <div className="admin-table-wrapper">
+                <table className="admin-table">
+                  <thead>
+                    <tr>
+                      <th>#</th>
+                      <th>Nama</th>
+                      <th>Gebetan 1</th>
+                      <th>Gebetan 2</th>
+                      <th>Gebetan 3</th>
+                      <th><Heart size={12} style={{ display: 'inline', verticalAlign: 'middle' }} /> Jodoh</th>
+                      <th>Match</th>
+                      <th>Waktu</th>
                     </tr>
-                  ))}
-                </tbody>
-              </table>
+                  </thead>
+                  <tbody>
+                    {paginatedData.map((entry, index) => (
+                      <tr key={entry.id || index}>
+                        <td className="admin-td-num">
+                          {(currentPage - 1) * ITEMS_PER_PAGE + index + 1}
+                        </td>
+                        <td className="admin-td-name">{entry.user_name || '-'}</td>
+                        <td>{entry.gebetan_1 || '-'}</td>
+                        <td>{entry.gebetan_2 || '-'}</td>
+                        <td>{entry.gebetan_3 || '-'}</td>
+                        <td className="admin-td-chosen">{entry.chosen_one || '-'}</td>
+                        <td className="admin-td-match">
+                          <span className="admin-match-pill">
+                            {entry.match_percentage != null ? `${entry.match_percentage}%` : '-'}
+                          </span>
+                        </td>
+                        <td className="admin-td-time">{formatDate(entry.created_at)}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            {/* Mobile / Card Grid View */}
+            <div className="admin-cards-grid">
+              {paginatedData.map((entry, index) => (
+                <div key={entry.id || index} className="admin-card-item">
+                  <div className="admin-card-header">
+                    <div className="admin-card-user">
+                      <span className="admin-card-num">#{(currentPage - 1) * ITEMS_PER_PAGE + index + 1}</span>
+                      <span className="admin-card-name">{entry.user_name || '-'}</span>
+                    </div>
+                    <span className="admin-match-pill">
+                      {entry.match_percentage != null ? `${entry.match_percentage}%` : '-'}
+                    </span>
+                  </div>
+
+                  <div className="admin-card-body">
+                    <div className="admin-card-section">
+                      <span className="admin-card-label">Gebetan:</span>
+                      <div className="admin-card-gebetan-list">
+                        <span className="admin-gebetan-tag">{entry.gebetan_1 || '-'}</span>
+                        <span className="admin-gebetan-tag">{entry.gebetan_2 || '-'}</span>
+                        <span className="admin-gebetan-tag">{entry.gebetan_3 || '-'}</span>
+                      </div>
+                    </div>
+
+                    <div className="admin-card-section admin-card-chosen-box">
+                      <span className="admin-card-label">
+                        <Heart size={14} className="admin-heart-icon" /> Jodoh Terpilih
+                      </span>
+                      <span className="admin-card-chosen-val">{entry.chosen_one || '-'}</span>
+                    </div>
+                  </div>
+
+                  <div className="admin-card-footer">
+                    <Calendar size={13} />
+                    <span className="admin-card-time">{formatDate(entry.created_at)}</span>
+                  </div>
+                </div>
+              ))}
             </div>
 
             {/* Pagination */}
