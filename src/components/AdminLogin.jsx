@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Lock, ArrowLeft, AlertCircle, ShieldCheck } from 'lucide-react';
 
 const ADMIN_CODE = 'Aresa88';
 
 export default function AdminLogin({ onAuthenticated }) {
+  const navigate = useNavigate();
   const [code, setCode] = useState('');
   const [error, setError] = useState('');
   const [isShaking, setIsShaking] = useState(false);
@@ -21,7 +23,7 @@ export default function AdminLogin({ onAuthenticated }) {
   };
 
   const handleGoHome = () => {
-    window.location.hash = '';
+    navigate('/');
   };
 
   return (

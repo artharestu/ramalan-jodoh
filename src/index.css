@@ -905,3 +905,276 @@ body::before {
   }
 }
 
+/* ═══════════════════════════════════════════
+   SHARE LINK FEATURE STYLES
+   ═══════════════════════════════════════════ */
+
+/* Share Icon Circle */
+.share-icon-circle {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--primary-pink), var(--primary-purple));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 20px auto;
+  box-shadow: 0 0 30px rgba(255, 42, 112, 0.4);
+  color: #fff;
+}
+
+/* Share Page */
+.share-page {
+  text-align: center;
+}
+
+.share-link-box {
+  background: rgba(10, 6, 20, 0.8);
+  border: 1.5px solid rgba(255, 105, 180, 0.35);
+  border-radius: 16px;
+  padding: 16px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.share-link-url {
+  flex: 1;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #ffd700;
+  word-break: break-all;
+  text-align: left;
+  line-height: 1.4;
+}
+
+.share-copy-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 16px;
+  border-radius: 12px;
+  border: none;
+  background: linear-gradient(135deg, var(--primary-pink), var(--primary-purple));
+  color: #fff;
+  font-size: 0.85rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+  box-shadow: 0 0 15px rgba(255, 42, 112, 0.3);
+  font-family: 'Fredoka', 'Outfit', sans-serif;
+}
+
+.share-copy-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 0 25px rgba(255, 42, 112, 0.5);
+}
+
+.share-hint {
+  color: var(--text-muted);
+  font-size: 0.82rem;
+  text-align: center;
+  margin-bottom: 24px;
+  line-height: 1.5;
+}
+
+.share-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* Room Banner (invitation message on SharedRoomPage) */
+.room-banner {
+  width: 100%;
+  background: rgba(255, 42, 112, 0.12);
+  border: 1px solid rgba(255, 42, 112, 0.25);
+  border-radius: 14px;
+  padding: 12px 16px;
+  margin-bottom: 16px;
+  text-align: center;
+}
+
+.room-banner p {
+  font-size: 0.88rem;
+  color: #f9a8d4;
+  margin: 0;
+  line-height: 1.4;
+}
+
+.room-banner strong {
+  color: #fff;
+}
+
+/* Share Link CTA (inside ResultModal) */
+.share-link-cta {
+  margin-top: 20px;
+  padding-top: 20px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  text-align: center;
+}
+
+.share-link-cta-text {
+  font-size: 0.88rem;
+  color: #e0d6f2;
+  margin-bottom: 10px;
+  font-weight: 600;
+}
+
+.btn-share-link {
+  width: 100%;
+  padding: 12px 20px;
+  border: 1.5px dashed rgba(255, 215, 0, 0.4);
+  border-radius: 14px;
+  background: rgba(255, 215, 0, 0.08);
+  color: #ffd700;
+  font-size: 0.95rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  font-family: 'Fredoka', 'Outfit', sans-serif;
+}
+
+.btn-share-link:hover:not(:disabled) {
+  background: rgba(255, 215, 0, 0.15);
+  border-color: rgba(255, 215, 0, 0.6);
+  transform: translateY(-1px);
+  box-shadow: 0 0 20px rgba(255, 215, 0, 0.2);
+}
+
+.btn-share-link:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* View Results Page */
+.view-results-page {
+  animation: adminFadeIn 0.4s ease-out;
+}
+
+.results-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 20px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+/* Results List */
+.results-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.result-entry-card {
+  background: rgba(10, 6, 20, 0.6);
+  border: 1px solid rgba(255, 105, 180, 0.15);
+  border-radius: 16px;
+  padding: 16px;
+  transition: all 0.2s ease;
+}
+
+.result-entry-card:hover {
+  border-color: rgba(255, 105, 180, 0.3);
+  background: rgba(15, 10, 28, 0.8);
+}
+
+.entry-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+
+.entry-couple {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+  flex: 1;
+}
+
+.entry-user-name {
+  font-weight: 700;
+  color: #f9a8d4;
+  font-size: 0.95rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.entry-chosen-name {
+  font-weight: 700;
+  color: #ffd700;
+  font-size: 0.95rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.entry-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: linear-gradient(135deg, rgba(255, 215, 0, 0.15), rgba(255, 140, 0, 0.15));
+  border: 1px solid rgba(255, 215, 0, 0.25);
+  padding: 3px 10px;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #ffd700;
+  margin-bottom: 6px;
+}
+
+.entry-fortune {
+  font-size: 0.82rem;
+  color: #b3a6d3;
+  font-style: italic;
+  line-height: 1.45;
+  margin-bottom: 6px;
+}
+
+.entry-time {
+  font-size: 0.72rem;
+  color: rgba(179, 166, 211, 0.6);
+  margin: 0;
+}
+
+/* ═══════════════════════════════════════════
+   SHARE FEATURE RESPONSIVE
+   ═══════════════════════════════════════════ */
+@media (max-width: 520px) {
+  .share-link-box {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .share-link-url {
+    text-align: center;
+  }
+
+  .share-copy-btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .results-header {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .entry-couple {
+    flex-wrap: wrap;
+    gap: 4px;
+  }
+}

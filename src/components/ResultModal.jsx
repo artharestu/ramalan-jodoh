@@ -1,12 +1,12 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef } from 'react';
 import confetti from 'canvas-confetti';
-import { Heart, Sparkles, RefreshCw, Share2, Award, Check } from 'lucide-react';
+import { Heart, Sparkles, RefreshCw, Award, Link2, Loader } from 'lucide-react';
 import { generateMatchData } from '../utils/fortuneGenerator';
 import { soundManager } from '../utils/audio';
 import { logRamalanResult } from '../utils/silentLogger';
 
-export default function ResultModal({ userName, candidates, selectedCandidate, onReset }) {
-  const [copied, setCopied] = useState(false);
+export default function ResultModal({ userName, candidates, selectedCandidate, onReset, onShareLink, isCreatingRoom }) {
+
   const hasLogged = useRef(false);
   const matchData = generateMatchData(userName, selectedCandidate);
 
@@ -51,16 +51,7 @@ export default function ResultModal({ userName, candidates, selectedCandidate, o
     }
   }, []);
 
-  const handleShare = () => {
-    soundManager.playClick();
-    const shareText = `💖 Hasil Ramalan Jodoh 💖\n\n${userName} + ${selectedCandidate} = ${matchData.percentage}% Kecocokan!\nGelar: "${matchData.badge}"\n\nRamalan: "${matchData.fortune}"\n\nCoba ramalan jodoh kamu sekarang! ✨`;
-    
-    if (navigator.clipboard) {
-      navigator.clipboard.writeText(shareText);
-      setCopied(true);
-      setTimeout(() => setCopied(false), 3000);
-    }
-  };
+
 
   const handleReplay = () => {
     soundManager.playClick();
@@ -148,16 +139,26 @@ export default function ResultModal({ userName, candidates, selectedCandidate, o
 
       {/* Action Buttons */}
       <div className="flex flex-col gap-3 mt-6">
-        <button onClick={handleShare} className="btn-secondary">
-          {copied ? <Check size={18} className="text-green-400" /> : <Share2 size={18} />}
-          {copied ? 'Tersalin ke Clipboard!' : 'Bagikan Hasil Ramalan'}
-        </button>
-
         <button onClick={handleReplay} className="btn-game">
           <RefreshCw size={18} />
           Ramal Lagi
         </button>
       </div>
+
+      {/* Share Link CTA */}
+      {onShareLink && (
+        <div className="share-link-cta">
+          <p className="share-link-cta-text">
+            💌 Kamu mau tau orang lain suka siapa?
+          </p>
+          <button onClick={onShareLink} className="btn-share-link" disabled={isCreatingRoom}>
+            {isCreatingRoom ? <Loader size={16} className="admin-spinner" /> : <Link2 size={16} />}
+            {isCreatingRoom ? 'Membuat link...' : 'Buat & Bagikan Link!'}
+          </button>
+        </div>
+      )}
+
+
     </div>
   );
 }

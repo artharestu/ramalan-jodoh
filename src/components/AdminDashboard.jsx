@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Search, LogOut, ArrowLeft, ChevronLeft, ChevronRight, Database, Users, Heart, Loader, AlertTriangle, RefreshCw } from 'lucide-react';
 import { fetchRamalanEntries } from '../utils/adminApi';
 import AdminLogin from './AdminLogin';
@@ -6,6 +7,7 @@ import AdminLogin from './AdminLogin';
 const ITEMS_PER_PAGE = 20;
 
 export default function AdminDashboard() {
+  const navigate = useNavigate();
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -67,7 +69,7 @@ export default function AdminDashboard() {
   };
 
   const handleGoHome = () => {
-    window.location.hash = '';
+    navigate('/');
   };
 
   const formatDate = (dateStr) => {

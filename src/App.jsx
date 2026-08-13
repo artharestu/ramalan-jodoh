@@ -1,80 +1,20 @@
-import React, { useState, useEffect } from 'react';
-import Header from './components/Header';
-import InputForm from './components/InputForm';
-import ShuffleAnimation from './components/ShuffleAnimation';
-import ResultModal from './components/ResultModal';
-import SoundToggle from './components/SoundToggle';
+import React from 'react';
+import { Routes, Route } from 'react-router-dom';
+import HomePage from './components/HomePage';
+import SharedRoomPage from './components/SharedRoomPage';
+import SharePage from './components/SharePage';
+import ViewResultsPage from './components/ViewResultsPage';
 import AdminDashboard from './components/AdminDashboard';
 
-function getPage() {
-  return window.location.hash === '#/admin' ? 'admin' : 'home';
-}
-
 export default function App() {
-  const [currentPage, setCurrentPage] = useState(getPage);
-  const [step, setStep] = useState('FORM'); // 'FORM' | 'SHUFFLE' | 'RESULT'
-  const [userData, setUserData] = useState({
-    userName: '',
-    candidates: []
-  });
-  const [selectedCandidate, setSelectedCandidate] = useState('');
-
-  useEffect(() => {
-    const onHashChange = () => setCurrentPage(getPage());
-    window.addEventListener('hashchange', onHashChange);
-    return () => window.removeEventListener('hashchange', onHashChange);
-  }, []);
-
-  const handleFormSubmit = ({ userName, candidates }) => {
-    setUserData({ userName, candidates });
-    setStep('SHUFFLE');
-  };
-
-  const handleShuffleComplete = (chosenCandidate) => {
-    setSelectedCandidate(chosenCandidate);
-    setStep('RESULT');
-  };
-
-  const handleReset = () => {
-    setStep('FORM');
-    setSelectedCandidate('');
-  };
-
-  // Admin page
-  if (currentPage === 'admin') {
-    return <AdminDashboard />;
-  }
-
-  // Main app
   return (
-    <main className="app-container">
-      <Header />
-
-      {step === 'FORM' && (
-        <InputForm onSubmit={handleFormSubmit} />
-      )}
-
-      {step === 'SHUFFLE' && (
-        <ShuffleAnimation
-          candidates={userData.candidates}
-          onComplete={handleShuffleComplete}
-        />
-      )}
-
-      {step === 'RESULT' && (
-        <ResultModal
-          userName={userData.userName}
-          candidates={userData.candidates}
-          selectedCandidate={selectedCandidate}
-          onReset={handleReset}
-        />
-      )}
-
-      <SoundToggle />
-
-      <footer className="mt-8 text-center text-xs text-purple-300/40" style={{ marginTop: '32px', textAlign: 'center', fontSize: '0.75rem', color: 'rgba(216, 180, 254, 0.4)' }}>
-        Game Ramalan Jodoh Interaktif © {new Date().getFullYear()} — by Aresa Studio ❤️
-      </footer>
-    </main>
+    <Routes>
+      <Route path="/" element={<HomePage />} />
+      <Route path="/admin" element={<AdminDashboard />} />
+      <Route path="/bagikan/:code" element={<SharePage />} />
+      <Route path="/lihat-hasil" element={<ViewResultsPage />} />
+      <Route path="/lihat-hasil/:code" element={<ViewResultsPage />} />
+      <Route path="/:code" element={<SharedRoomPage />} />
+    </Routes>
   );
 }
