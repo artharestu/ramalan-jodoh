@@ -40,9 +40,6 @@ export default function HomePage() {
       return;
     }
 
-    recordSubmission();
-    setCooldownSeconds(getRemainingCooldown());
-
     setUserData({ userName, candidates });
     setStep('SHUFFLE');
   }, []);
@@ -50,6 +47,10 @@ export default function HomePage() {
   const handleShuffleComplete = (chosenCandidate) => {
     setSelectedCandidate(chosenCandidate);
     setStep('RESULT');
+
+    // Catat submission saat hasil muncul — cooldown dimulai dari sini
+    recordSubmission();
+    setCooldownSeconds(getRemainingCooldown());
   };
 
   const handleReset = () => {

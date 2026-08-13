@@ -56,9 +56,6 @@ export default function SharedRoomPage() {
       return;
     }
 
-    recordSubmission();
-    setCooldownSeconds(getRemainingCooldown());
-
     setUserData({ userName, candidates });
     setStep('SHUFFLE');
   }, []);
@@ -66,6 +63,10 @@ export default function SharedRoomPage() {
   const handleShuffleComplete = async (chosenCandidate) => {
     setSelectedCandidate(chosenCandidate);
     setStep('RESULT');
+
+    // Catat submission saat hasil muncul — cooldown dimulai dari sini
+    recordSubmission();
+    setCooldownSeconds(getRemainingCooldown());
 
     const matchData = generateMatchData(userData.userName, chosenCandidate);
 
