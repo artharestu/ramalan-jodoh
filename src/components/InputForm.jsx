@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import { User, Heart, Sparkles, AlertCircle } from 'lucide-react';
+import { User, Heart, Sparkles, AlertCircle, Clock } from 'lucide-react';
 import { soundManager } from '../utils/audio';
 
-export default function InputForm({ onSubmit }) {
+export default function InputForm({ onSubmit, cooldownSeconds = 0 }) {
   const [formData, setFormData] = useState({
     userName: '',
     candidate1: '',
@@ -19,6 +19,8 @@ export default function InputForm({ onSubmit }) {
 
   const [errorMessage, setErrorMessage] = useState('');
 
+  const isCoolingDown = cooldownSeconds > 0;
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
@@ -32,6 +34,12 @@ export default function InputForm({ onSubmit }) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+
+    if (isCoolingDown) {
+      setErrorMessage(`⏳ Sabar dulu ya! Bintang masih menghitung jodohmu... Tunggu ${cooldownSeconds} detik lagi 💫`);
+      soundManager.playError();
+      return;
+    }
 
     const newErrors = {
       userName: !formData.userName.trim(),
@@ -153,11 +161,34 @@ export default function InputForm({ onSubmit }) {
       )}
 
       {/* Submit Button */}
-      <button type="submit" className="btn-game">
-        <Sparkles size={20} className="animate-spin" />
-        RAMAL JODOH
-        <Heart size={20} className="fill-white" />
+      <button
+        type="submit"
+        className={`btn-game ${isCoolingDown ? 'btn-cooldown' : ''}`}
+        disabled={isCoolingDown}
+      >
+        {isCoolingDown ? (
+          <>
+            <Clock size={20} className="cooldown-spin" />
+            Tunggu {cooldownSeconds} detik...
+          </>
+        ) : (
+          <>
+            <Sparkles size={20} className="animate-spin" />
+            RAMAL JODOH
+            <Heart size={20} className="fill-white" />
+          </>
+        )}
       </button>
+
+      {/* Cooldown Progress Bar */}
+      {isCoolingDown && (
+        <div className="cooldown-bar-wrapper">
+          <div
+            className="cooldown-bar-fill"
+            style={{ width: `${(cooldownSeconds / 30) * 100}%` }}
+          />
+        </div>
+      )}
     </form>
   );
 }

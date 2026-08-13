@@ -1,14 +1,15 @@
 import React, { useEffect, useRef } from 'react';
 import confetti from 'canvas-confetti';
-import { Heart, Sparkles, RefreshCw, Award, Link2, Loader } from 'lucide-react';
+import { Heart, Sparkles, RefreshCw, Award, Link2, Loader, Clock } from 'lucide-react';
 import { generateMatchData } from '../utils/fortuneGenerator';
 import { soundManager } from '../utils/audio';
 import { logRamalanResult } from '../utils/silentLogger';
 
-export default function ResultModal({ userName, candidates, selectedCandidate, onReset, onShareLink, isCreatingRoom }) {
+export default function ResultModal({ userName, candidates, selectedCandidate, onReset, onShareLink, isCreatingRoom, cooldownSeconds = 0 }) {
 
   const hasLogged = useRef(false);
   const matchData = generateMatchData(userName, selectedCandidate);
+  const isCoolingDown = cooldownSeconds > 0;
 
   useEffect(() => {
     // Trigger confetti explosion
@@ -139,10 +140,33 @@ export default function ResultModal({ userName, candidates, selectedCandidate, o
 
       {/* Action Buttons */}
       <div className="flex flex-col gap-3 mt-6">
-        <button onClick={handleReplay} className="btn-game">
-          <RefreshCw size={18} />
-          Ramal Lagi
+        <button
+          onClick={handleReplay}
+          className={`btn-game ${isCoolingDown ? 'btn-cooldown' : ''}`}
+          disabled={isCoolingDown}
+        >
+          {isCoolingDown ? (
+            <>
+              <Clock size={18} className="cooldown-spin" />
+              Tunggu {cooldownSeconds} detik...
+            </>
+          ) : (
+            <>
+              <RefreshCw size={18} />
+              Ramal Lagi
+            </>
+          )}
         </button>
+
+        {/* Cooldown Progress Bar */}
+        {isCoolingDown && (
+          <div className="cooldown-bar-wrapper">
+            <div
+              className="cooldown-bar-fill"
+              style={{ width: `${(cooldownSeconds / 30) * 100}%` }}
+            />
+          </div>
+        )}
       </div>
 
       {/* Share Link CTA */}

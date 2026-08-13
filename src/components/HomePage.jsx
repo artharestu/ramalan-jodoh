@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Header from './Header';
 import InputForm from './InputForm';
@@ -8,6 +8,7 @@ import SoundToggle from './SoundToggle';
 import { generateMatchData } from '../utils/fortuneGenerator';
 import { logRamalanResult } from '../utils/silentLogger';
 import { createShareRoom } from '../utils/shareApi';
+import { canSubmitRamalan, recordSubmission, getRemainingCooldown } from '../utils/rateLimiter';
 
 export default function HomePage() {
   const navigate = useNavigate();
@@ -15,11 +16,36 @@ export default function HomePage() {
   const [userData, setUserData] = useState({ userName: '', candidates: [] });
   const [selectedCandidate, setSelectedCandidate] = useState('');
   const [isCreatingRoom, setIsCreatingRoom] = useState(false);
+  const [cooldownSeconds, setCooldownSeconds] = useState(() => getRemainingCooldown());
 
-  const handleFormSubmit = ({ userName, candidates }) => {
+  // Cooldown ticker — update setiap detik saat cooldown aktif
+  useEffect(() => {
+    if (cooldownSeconds <= 0) return;
+
+    const timer = setInterval(() => {
+      const remaining = getRemainingCooldown();
+      setCooldownSeconds(remaining);
+      if (remaining <= 0) {
+        clearInterval(timer);
+      }
+    }, 1000);
+
+    return () => clearInterval(timer);
+  }, [cooldownSeconds]);
+
+  const handleFormSubmit = useCallback(({ userName, candidates }) => {
+    const check = canSubmitRamalan();
+    if (!check.allowed) {
+      setCooldownSeconds(getRemainingCooldown());
+      return;
+    }
+
+    recordSubmission();
+    setCooldownSeconds(getRemainingCooldown());
+
     setUserData({ userName, candidates });
     setStep('SHUFFLE');
-  };
+  }, []);
 
   const handleShuffleComplete = (chosenCandidate) => {
     setSelectedCandidate(chosenCandidate);
@@ -27,6 +53,7 @@ export default function HomePage() {
   };
 
   const handleReset = () => {
+    setCooldownSeconds(getRemainingCooldown());
     setStep('FORM');
     setSelectedCandidate('');
   };
@@ -48,7 +75,10 @@ export default function HomePage() {
       <Header />
 
       {step === 'FORM' && (
-        <InputForm onSubmit={handleFormSubmit} />
+        <InputForm
+          onSubmit={handleFormSubmit}
+          cooldownSeconds={cooldownSeconds}
+        />
       )}
 
       {step === 'SHUFFLE' && (
@@ -66,6 +96,7 @@ export default function HomePage() {
           onReset={handleReset}
           onShareLink={handleShareLink}
           isCreatingRoom={isCreatingRoom}
+          cooldownSeconds={cooldownSeconds}
         />
       )}
 

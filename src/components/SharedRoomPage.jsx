@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import Header from './Header';
 import InputForm from './InputForm';
@@ -7,6 +7,7 @@ import ResultModal from './ResultModal';
 import SoundToggle from './SoundToggle';
 import { getShareRoom, addShareRoomEntry, createShareRoom } from '../utils/shareApi';
 import { generateMatchData } from '../utils/fortuneGenerator';
+import { canSubmitRamalan, recordSubmission, getRemainingCooldown } from '../utils/rateLimiter';
 import { Loader, AlertTriangle, ArrowLeft } from 'lucide-react';
 
 export default function SharedRoomPage() {
@@ -18,6 +19,7 @@ export default function SharedRoomPage() {
   const [userData, setUserData] = useState({ userName: '', candidates: [] });
   const [selectedCandidate, setSelectedCandidate] = useState('');
   const [isCreatingRoom, setIsCreatingRoom] = useState(false);
+  const [cooldownSeconds, setCooldownSeconds] = useState(() => getRemainingCooldown());
 
   useEffect(() => {
     const checkRoom = async () => {
@@ -32,10 +34,34 @@ export default function SharedRoomPage() {
     checkRoom();
   }, [code]);
 
-  const handleFormSubmit = ({ userName, candidates }) => {
+  // Cooldown ticker
+  useEffect(() => {
+    if (cooldownSeconds <= 0) return;
+
+    const timer = setInterval(() => {
+      const remaining = getRemainingCooldown();
+      setCooldownSeconds(remaining);
+      if (remaining <= 0) {
+        clearInterval(timer);
+      }
+    }, 1000);
+
+    return () => clearInterval(timer);
+  }, [cooldownSeconds]);
+
+  const handleFormSubmit = useCallback(({ userName, candidates }) => {
+    const check = canSubmitRamalan();
+    if (!check.allowed) {
+      setCooldownSeconds(getRemainingCooldown());
+      return;
+    }
+
+    recordSubmission();
+    setCooldownSeconds(getRemainingCooldown());
+
     setUserData({ userName, candidates });
     setStep('SHUFFLE');
-  };
+  }, []);
 
   const handleShuffleComplete = async (chosenCandidate) => {
     setSelectedCandidate(chosenCandidate);
@@ -57,6 +83,7 @@ export default function SharedRoomPage() {
   };
 
   const handleReset = () => {
+    setCooldownSeconds(getRemainingCooldown());
     setStep('FORM');
     setSelectedCandidate('');
   };
@@ -112,7 +139,10 @@ export default function SharedRoomPage() {
       {step === 'FORM' && (
         <>
           <Header />
-          <InputForm onSubmit={handleFormSubmit} />
+          <InputForm
+            onSubmit={handleFormSubmit}
+            cooldownSeconds={cooldownSeconds}
+          />
         </>
       )}
 
@@ -131,6 +161,7 @@ export default function SharedRoomPage() {
           onReset={handleReset}
           onShareLink={handleShareLink}
           isCreatingRoom={isCreatingRoom}
+          cooldownSeconds={cooldownSeconds}
         />
       )}
 
